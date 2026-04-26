@@ -105,7 +105,7 @@ export async function verifyOTP(email: string, otp: string) {
         const { data: existingUser } = await supabaseAdmin.auth.admin.listUsers();
         const user = existingUser.users.find(u => u.email === email);
         if (user) {
-            profile = { id: user.id };
+            profile = { id: user.id, is_admin: false };
         } else {
             console.error('Auth User Create Error:', authErr);
             return { error: 'Failed to create user profile.' };
