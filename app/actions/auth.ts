@@ -3,6 +3,7 @@
 import { supabaseAdmin } from '@/lib/supabase';
 import { createSession } from '@/lib/session';
 import nodemailer from 'nodemailer';
+import { cookies } from 'next/headers';
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -81,7 +82,7 @@ export async function verifyOTP(email: string, otp: string) {
   // Check if profile exists
   let { data: profile } = await supabaseAdmin
     .from('profiles')
-    .select('id')
+    .select('id, is_admin')
     .eq('email', email)
     .single();
 
@@ -110,12 +111,16 @@ export async function verifyOTP(email: string, otp: string) {
             return { error: 'Failed to create user profile.' };
         }
     } else {
-        profile = { id: authUser.user.id };
+        profile = { id: authUser.user.id, is_admin: false };
     }
   }
 
   // Create JWT session
-  await createSession(profile.id, email);
+  await createSession(profile.id, email, profile?.is_admin || false);
 
   return { success: true };
+}
+
+export async function logout() {
+  (await cookies()).set('session', '', { expires: new Date(0) });
 }

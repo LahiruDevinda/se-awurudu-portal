@@ -36,6 +36,11 @@ export async function proxy(request: NextRequest) {
     if (!payload) {
       throw new Error('Invalid token');
     }
+    
+    // Protect /admin routes
+    if (pathname.startsWith('/admin') && !payload.isAdmin) {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
   } catch (e) {
     // Session is invalid or expired
     const response = NextResponse.redirect(new URL('/login', request.url));

@@ -39,3 +39,45 @@ export async function getLeaderboard() {
     })).sort((a, b) => b.votes - a.votes);
   }
 }
+
+export async function getPapolGuesses() {
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('papol_guesses')
+      .select('*, profiles(email)');
+    
+    if (error) throw error;
+    return data || [];
+  } catch (e) {
+    console.warn('Error fetching guesses', e);
+    return [];
+  }
+}
+
+export async function clearAllVotes() {
+  try {
+    const { error } = await supabaseAdmin
+      .from('votes')
+      .delete()
+      .neq('user_id', '00000000-0000-0000-0000-000000000000');
+    
+    if (error) throw error;
+    return { success: true };
+  } catch (e) {
+    return { error: 'Failed to clear votes' };
+  }
+}
+
+export async function clearAllGuesses() {
+  try {
+    const { error } = await supabaseAdmin
+      .from('papol_guesses')
+      .delete()
+      .neq('user_id', '00000000-0000-0000-0000-000000000000');
+    
+    if (error) throw error;
+    return { success: true };
+  } catch (e) {
+    return { error: 'Failed to clear guesses' };
+  }
+}
