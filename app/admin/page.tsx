@@ -7,7 +7,7 @@ import { getContestants } from '@/app/actions/voting';
 import { addContestant, deleteContestant } from '@/app/actions/contestants';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
+import { Switch } from '@/components/ui/switch'; 
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { Trophy, Users, Image as ImageIcon, Settings, AlertTriangle, Plus, Trash2, VenetianMask } from 'lucide-react';
@@ -124,7 +124,7 @@ export default function AdminDashboard() {
                 <Switch 
                   id="voting-toggle" 
                   checked={settings?.voting_active} 
-                  onCheckedChange={(v) => handleToggle('voting_active', v)} 
+                  onCheckedChange={(v: boolean) => handleToggle('voting_active', v)} 
                 />
               </div>
             </CardContent>
@@ -140,7 +140,7 @@ export default function AdminDashboard() {
                 <Switch 
                   id="papol-toggle" 
                   checked={settings?.papol_active} 
-                  onCheckedChange={(v) => handleToggle('papol_active', v)} 
+                  onCheckedChange={(v: boolean) => handleToggle('papol_active', v)} 
                 />
               </div>
             </CardContent>
@@ -156,7 +156,7 @@ export default function AdminDashboard() {
                 <Switch 
                   id="media-toggle" 
                   checked={settings?.media_active} 
-                  onCheckedChange={(v) => handleToggle('media_active', v)} 
+                  onCheckedChange={(v: boolean) => handleToggle('media_active', v)} 
                 />
               </div>
             </CardContent>
@@ -172,7 +172,7 @@ export default function AdminDashboard() {
                 <Switch 
                   id="puzzle-toggle" 
                   checked={settings?.puzzle_active} 
-                  onCheckedChange={(v) => handleToggle('puzzle_active', v)} 
+                  onCheckedChange={(v: boolean) => handleToggle('puzzle_active', v)} 
                 />
               </div>
             </CardContent>
@@ -188,7 +188,7 @@ export default function AdminDashboard() {
                 <Switch 
                   id="stranger-toggle" 
                   checked={settings?.secret_stranger_active} 
-                  onCheckedChange={(v) => handleToggle('secret_stranger_active', v)} 
+                  onCheckedChange={(v: boolean) => handleToggle('secret_stranger_active', v)} 
                 />
               </div>
             </CardContent>
