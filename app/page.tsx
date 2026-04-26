@@ -63,10 +63,6 @@ export default function Home() {
           </Link>
         </div>
       </div>
-
-      <div className="absolute bottom-8 text-center w-full z-10 text-muted-foreground text-sm">
-        &copy; {new Date().getFullYear()} University of Kelaniya. Built with Next.js & Supabase.
-      </div>
     </div>
   );
 }
