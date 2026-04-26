@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import confetti from 'canvas-confetti';
 import { saveGameScore } from '@/app/actions/game';
+import { getSystemSettings } from '@/app/actions/settings';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
@@ -17,6 +18,7 @@ export default function ImagePuzzle() {
   const [time, setTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [selectedTileIndex, setSelectedTileIndex] = useState<number | null>(null);
+  const [isActive, setIsActive] = useState(true);
 
   // Initialize sorted array [0, 1, ..., 8]
   const solvedState = Array.from({ length: TOTAL_TILES }, (_, i) => i);
@@ -42,6 +44,7 @@ export default function ImagePuzzle() {
   }, []);
 
   useEffect(() => {
+    getSystemSettings().then(settings => setIsActive(settings.puzzle_active));
     initGame();
   }, [initGame]);
 
@@ -56,7 +59,7 @@ export default function ImagePuzzle() {
   }, [isPlaying, isSolving]);
 
   const handleTileClick = (index: number) => {
-    if (!isPlaying) return;
+    if (!isPlaying || !isActive) return;
 
     if (selectedTileIndex === null) {
       setSelectedTileIndex(index);
@@ -101,12 +104,17 @@ export default function ImagePuzzle() {
         <CardTitle className="text-2xl text-primary font-bold">Awurudu Image Puzzle</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex justify-between mb-4 text-sm font-semibold text-muted-foreground">
+        {!isActive && (
+          <div className="mb-6 bg-destructive/10 text-destructive border border-destructive/20 p-4 rounded-lg font-bold text-center">
+            The Image Puzzle Game is currently closed by the Admin.
+          </div>
+        )}
+        <div className={`flex justify-between mb-4 text-sm font-semibold text-muted-foreground ${!isActive ? 'opacity-50' : ''}`}>
           <div>Moves: {moves}</div>
           <div>Time: {time}s</div>
         </div>
 
-        <div className="relative w-full aspect-square bg-muted rounded-lg overflow-hidden grid grid-cols-3 grid-rows-3 gap-1 p-1">
+        <div className={`relative w-full aspect-square bg-muted rounded-lg overflow-hidden grid grid-cols-3 grid-rows-3 gap-1 p-1 ${!isActive ? 'opacity-50 pointer-events-none' : ''}`}>
           {tiles.map((tile, index) => {
             const x = (tile % GRID_SIZE) * 100;
             const y = Math.floor(tile / GRID_SIZE) * 100;
@@ -135,7 +143,7 @@ export default function ImagePuzzle() {
         </div>
       </CardContent>
       <CardFooter>
-        <Button onClick={initGame} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+        <Button onClick={initGame} disabled={!isActive} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
           {isSolving ? 'Play Again' : 'Shuffle & Restart'}
         </Button>
       </CardFooter>

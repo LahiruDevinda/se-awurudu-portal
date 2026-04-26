@@ -45,10 +45,12 @@ export default function LoginForm() {
   };
 
   return (
-    <Card className="w-[350px] shadow-lg border-primary/20">
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl text-primary font-bold">Awurudu Portal</CardTitle>
-        <CardDescription>University of Kelaniya Students Only</CardDescription>
+    <Card className="w-full max-w-md shadow-2xl border-white/10 bg-background/95 backdrop-blur-md">
+      <CardHeader className="space-y-1 text-center">
+        <CardTitle className="text-3xl font-bold tracking-tight">UoK Awurudu Portal</CardTitle>
+        <CardDescription>
+          Sign in with your university email to vote and play.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         {step === 'email' ? (

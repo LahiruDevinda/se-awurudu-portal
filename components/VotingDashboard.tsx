@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { getContestants, getUserVotes, castVote } from '@/app/actions/voting';
+import { getSystemSettings } from '@/app/actions/settings';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -25,15 +26,18 @@ export default function VotingDashboard() {
   const [votes, setVotes] = useState<Vote[]>([]);
   const [loading, setLoading] = useState(true);
   const [votingId, setVotingId] = useState<string | null>(null);
+  const [votingActive, setVotingActive] = useState(true);
 
   useEffect(() => {
     async function loadData() {
-      const [fetchedContestants, fetchedVotes] = await Promise.all([
+      const [fetchedContestants, fetchedVotes, settings] = await Promise.all([
         getContestants(),
         getUserVotes(),
+        getSystemSettings(),
       ]);
       setContestants(fetchedContestants || []);
       setVotes(fetchedVotes || []);
+      setVotingActive(settings.voting_active);
       setLoading(false);
     }
     loadData();
@@ -46,7 +50,8 @@ export default function VotingDashboard() {
       toast.error(result.error);
     } else {
       toast.success('Vote cast successfully!');
-      setVotes([...votes, { category, contestant_id: contestantId }]);
+      // Update local state (remove previous vote for this category, add new)
+      setVotes([...votes.filter(v => v.category !== category), { category, contestant_id: contestantId }]);
     }
     setVotingId(null);
   };
@@ -92,10 +97,10 @@ export default function VotingDashboard() {
                   <Button 
                     className="w-full"
                     variant={isVotedForThis ? 'secondary' : 'default'}
-                    disabled={hasVotedCategory || votingId === contestant.id}
+                    disabled={!votingActive || votingId === contestant.id || isVotedForThis}
                     onClick={() => handleVote(contestant.id, contestant.category)}
                   >
-                    {isVotedForThis ? 'Voted' : (votingId === contestant.id ? 'Voting...' : 'Vote')}
+                    {!votingActive ? 'Voting Closed' : isVotedForThis ? 'Voted' : (hasVotedCategory ? 'Update My Vote' : (votingId === contestant.id ? 'Voting...' : 'Vote'))}
                   </Button>
                 </CardFooter>
               </Card>
@@ -114,6 +119,11 @@ export default function VotingDashboard() {
         <div className="inline-flex items-center justify-center bg-secondary/20 text-secondary-foreground px-4 py-2 rounded-full font-semibold">
           Votes Remaining: {2 - votes.length} / 2
         </div>
+        {!votingActive && (
+          <div className="mt-6 inline-block bg-destructive/10 text-destructive border border-destructive/20 px-6 py-3 rounded-lg font-bold">
+            Voting is currently closed by the Admin.
+          </div>
+        )}
       </div>
 
       {renderGrid('Awurudu Kumara', kumaras, 'Kumara')}
