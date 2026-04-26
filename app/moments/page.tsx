@@ -73,80 +73,71 @@ export default function MomentsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <header className="bg-primary text-primary-foreground py-4 px-6 shadow-md flex justify-between items-center">
-        <h1 className="text-2xl font-bold tracking-tight">Awurudu Festival</h1>
-        <Link href="/">
-          <Button variant="secondary" size="sm">Back to Home</Button>
-        </Link>
-      </header>
-
-      <main className="flex-grow flex flex-col items-center p-4 sm:p-8">
-        <div className="max-w-2xl w-full">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-extrabold text-primary mb-2">Moments Gallery</h1>
-            <p className="text-muted-foreground">Share your favorite Awurudu moment! Upload one photo or video. Uploading a new one will replace your old one.</p>
-          </div>
-
-          {!isActive && (
-            <div className="mb-6 bg-destructive/10 text-destructive border border-destructive/20 p-4 rounded-lg font-bold text-center">
-              Media uploads are currently closed.
-            </div>
-          )}
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Card className="border-primary/20 shadow-xl h-fit">
-              <form onSubmit={handleUpload}>
-                <CardHeader>
-                  <CardTitle>{currentMoment ? 'Update Your Moment' : 'Upload a Moment'}</CardTitle>
-                  <CardDescription>Max size: 10MB (Images or Videos only)</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*,video/*"
-                    onChange={handleFileChange}
-                    disabled={!isActive || uploading}
-                    className="cursor-pointer"
-                  />
-                </CardContent>
-                <CardFooter>
-                  <Button 
-                    className="w-full text-md py-6 bg-primary hover:bg-primary/90" 
-                    disabled={!isActive || uploading || !file}
-                    type="submit"
-                  >
-                    {uploading ? 'Uploading...' : currentMoment ? 'Replace Current Moment' : 'Upload'}
-                  </Button>
-                </CardFooter>
-              </form>
-            </Card>
-
-            <Card className="border-primary/20 shadow-xl h-fit overflow-hidden">
-              <CardHeader className="bg-secondary/10 border-b border-secondary/20 pb-4">
-                <CardTitle className="text-center">Your Current Moment</CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                {!currentMoment ? (
-                  <div className="aspect-square flex items-center justify-center text-muted-foreground p-8 text-center bg-muted/20">
-                    You haven&apos;t uploaded any moments yet.
-                  </div>
-                ) : (
-                  <div className="aspect-square relative flex items-center justify-center bg-black/5">
-                    {currentMoment.file_type === 'image' ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={currentMoment.file_url} alt="Your Awurudu Moment" className="max-w-full max-h-full object-contain" />
-                    ) : (
-                      <video src={currentMoment.file_url} controls className="max-w-full max-h-full" />
-                    )}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+    <main className="min-h-screen flex flex-col items-center p-4 sm:p-8 bg-muted/30">
+      <div className="max-w-4xl w-full">
+        <div className="text-center mb-8 mt-6">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-primary mb-2">Moments Gallery</h1>
+          <p className="text-muted-foreground text-sm md:text-base">Share your favorite Awurudu moment! Upload one photo or video.</p>
         </div>
-      </main>
-    </div>
+
+        {!isActive && (
+          <div className="mb-6 bg-destructive/10 text-destructive border border-destructive/20 p-4 rounded-xl font-bold text-center">
+            Media uploads are currently closed.
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <Card className="border-primary/20 shadow-xl h-fit rounded-2xl overflow-hidden">
+            <form onSubmit={handleUpload}>
+              <CardHeader>
+                <CardTitle>{currentMoment ? 'Update Your Moment' : 'Upload a Moment'}</CardTitle>
+                <CardDescription>Max size: 10MB (Images or Videos only)</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*,video/*"
+                  onChange={handleFileChange}
+                  disabled={!isActive || uploading}
+                  className="cursor-pointer h-12 pt-2 rounded-xl"
+                />
+              </CardContent>
+              <CardFooter>
+                <Button 
+                  className="w-full h-14 text-md font-bold rounded-xl" 
+                  disabled={!isActive || uploading || !file}
+                  type="submit"
+                >
+                  {uploading ? 'Uploading...' : currentMoment ? 'Replace Current Moment' : 'Upload Now'}
+                </Button>
+              </CardFooter>
+            </form>
+          </Card>
+
+          <Card className="border-primary/20 shadow-xl h-fit overflow-hidden rounded-2xl">
+            <CardHeader className="bg-secondary/10 border-b border-secondary/20 pb-4">
+              <CardTitle className="text-center text-lg">Your Live Moment</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              {!currentMoment ? (
+                <div className="aspect-square flex items-center justify-center text-muted-foreground p-8 text-center bg-muted/20">
+                  You haven&apos;t uploaded any moments yet.
+                </div>
+              ) : (
+                <div className="aspect-square relative flex items-center justify-center bg-black/5">
+                  {currentMoment.file_type === 'image' ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={currentMoment.file_url} alt="Your Awurudu Moment" className="max-w-full max-h-full object-contain" />
+                  ) : (
+                    <video src={currentMoment.file_url} controls className="max-w-full max-h-full" />
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </main>
   );
 }

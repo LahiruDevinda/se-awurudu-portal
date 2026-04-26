@@ -97,15 +97,16 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-muted/20 pb-12">
-      <header className="bg-primary text-primary-foreground py-6 px-8 shadow-md flex justify-between items-center">
+      <header className="bg-primary text-primary-foreground py-4 px-4 md:px-8 shadow-md flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
-            <Settings className="w-8 h-8" /> Command Center
+          <h1 className="text-xl md:text-3xl font-bold tracking-tight flex items-center gap-2">
+            <Settings className="w-6 h-6 md:w-8 md:h-8" /> 
+            <span>Command Center</span>
           </h1>
-          <p className="text-primary-foreground/80">Manage Awurudu Festival Features</p>
+          <p className="text-xs md:text-sm text-primary-foreground/80 hidden sm:block">Manage Awurudu Festival Features</p>
         </div>
         <Link href="/">
-          <Button variant="secondary">Exit Admin</Button>
+          <Button variant="secondary" size="sm" className="md:size-default">Exit</Button>
         </Link>
       </header>
 

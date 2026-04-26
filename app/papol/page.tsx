@@ -59,65 +59,56 @@ export default function PapolPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <header className="bg-primary text-primary-foreground py-4 px-6 shadow-md flex justify-between items-center">
-        <h1 className="text-2xl font-bold tracking-tight">Awurudu Festival</h1>
-        <Link href="/">
-          <Button variant="secondary" size="sm">Back to Home</Button>
-        </Link>
-      </header>
-
-      <main className="flex-grow flex items-center justify-center p-4">
-        <div className="max-w-md w-full">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-extrabold text-primary mb-2">Papol Gediye Ata Ganan Kirima</h1>
-            <p className="text-muted-foreground">Can you guess the exact number of seeds inside the Papaya?</p>
-          </div>
-
-          {!isActive && (
-            <div className="mb-6 bg-destructive/10 text-destructive border border-destructive/20 p-4 rounded-lg font-bold text-center">
-              The Papol Game is currently closed.
-            </div>
-          )}
-
-          <Card className="border-primary/20 shadow-xl">
-            <form onSubmit={handleSubmit}>
-              <CardHeader>
-                <CardTitle>Submit Your Guess</CardTitle>
-                <CardDescription>
-                  {previousGuess !== null 
-                    ? `You previously guessed ${previousGuess} seeds.` 
-                    : 'Enter your best guess below!'}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex flex-col space-y-1.5">
-                    <Input
-                      id="guess"
-                      placeholder="e.g. 345"
-                      type="number"
-                      value={guess}
-                      onChange={(e) => setGuess(e.target.value)}
-                      disabled={!isActive || submitting}
-                      className="text-2xl py-6 text-center font-bold"
-                    />
-                  </div>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button 
-                  className="w-full text-lg py-6 bg-primary hover:bg-primary/90" 
-                  disabled={!isActive || submitting || !guess || parseInt(guess) === previousGuess}
-                  type="submit"
-                >
-                  {submitting ? 'Saving...' : previousGuess !== null ? 'Edit My Guess' : 'Submit Guess'}
-                </Button>
-              </CardFooter>
-            </form>
-          </Card>
+    <main className="min-h-screen flex items-center justify-center p-4 bg-muted/30">
+      <div className="max-w-md w-full">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-primary mb-2">Papol Gediye Guess</h1>
+          <p className="text-muted-foreground text-sm md:text-base">Can you guess the number of seeds inside the Papaya?</p>
         </div>
-      </main>
-    </div>
+
+        {!isActive && (
+          <div className="mb-6 bg-destructive/10 text-destructive border border-destructive/20 p-4 rounded-xl font-bold text-center">
+            The Papol Game is currently closed.
+          </div>
+        )}
+
+        <Card className="border-primary/20 shadow-xl overflow-hidden rounded-2xl">
+          <form onSubmit={handleSubmit}>
+            <CardHeader className="text-center">
+              <CardTitle>Submit Your Guess</CardTitle>
+              <CardDescription>
+                {previousGuess !== null 
+                  ? `You previously guessed ${previousGuess} seeds.` 
+                  : 'Enter your best guess below!'}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex flex-col space-y-1.5">
+                  <Input
+                    id="guess"
+                    placeholder="e.g. 345"
+                    type="number"
+                    value={guess}
+                    onChange={(e) => setGuess(e.target.value)}
+                    disabled={!isActive || submitting}
+                    className="h-16 text-3xl text-center font-black border-primary/20 rounded-xl"
+                  />
+                </div>
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Button 
+                className="w-full h-14 text-lg font-bold rounded-xl" 
+                disabled={!isActive || submitting || !guess || parseInt(guess) === previousGuess}
+                type="submit"
+              >
+                {submitting ? 'Saving...' : previousGuess !== null ? 'Update My Guess' : 'Submit Guess'}
+              </Button>
+            </CardFooter>
+          </form>
+        </Card>
+      </div>
+    </main>
   );
 }
